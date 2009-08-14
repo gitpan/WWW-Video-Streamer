@@ -18,11 +18,11 @@ WWW::Video::Streamer - A HTTP video streamer and browser.
 
 =head1 VERSION
 
-Version 0.0.0
+Version 0.0.1
 
 =cut
 
-our $VERSION = '0.0.0';
+our $VERSION = '0.0.1';
 
 =head1 SYNOPSIS
 
@@ -54,7 +54,7 @@ sub new {
 			  maxL=>20, replaceP=>50, maxR=>20};
 	bless $self;
 
-	$self->{mt}='/usr/local/bin/mencoder {$file} -oac mp3lame -ovc lavc -of avi -lavcopts vcodec=flv:vbitrate={$vb} '.
+	$self->{mt}='/usr/local/bin/mencoder {$file} -oac mp3lame -ovc lavc -of avi -lavcopts vbitrate={$vb} '.
 	            '-lameopts cbr={$ab} {$size} -vf scale={$x}:{$y} -really-quiet -o -';
 	$self->{x}='140';
 	$self->{y}='100';
@@ -531,6 +531,8 @@ sub stream{
 		return undef;
     }
 
+	warn($mencoder);
+
 	print $self->{cgi}->header(-type => "video/avi");
 
 	system($mencoder);
@@ -613,7 +615,7 @@ The below is a example config file at the defaults.
     vb=120
     ab=40
     dir=/arc/video/
-    mt=/usr/local/bin/mencoder {$file} -oac mp3lame -ovc lavc -of avi -lavcopts vcodec=flv:vbitrate={$vb} -lameopts cbr={$ab} {$size} -vf scale={$x}:{$y} -really-quiet -o -
+    mt=/usr/local/bin/mencoder {$file} -oac mp3lame -ovc lavc -of avi -lavcopts vbitrate={$vb} -lameopts cbr={$ab} {$size} -vf scale={$x}:{$y} -really-quiet -o -
 
 =head2 ab
 
@@ -669,7 +671,7 @@ as changing the 'mt' variable can allow other things to be executed.
 If none-numeric values for 'x', 'y', 'ab', or 'vb' are found when it goes to play it,
 the defaults are used.
 
-=head2 USING
+=head1 USING
 
 Copy 'bin/wvs.cgi' to your directory on your web server, enable CGI on that directory,
 and then if you want to override the defaults create 'config.ini' in hat directory.
